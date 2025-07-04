@@ -1,6 +1,6 @@
 [package]
 name = "shellder"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Saugata Kundu <kundusaugata576@gmail.com>"]
 description = "A lightweight, type-safe dependency injection and application framework for Rust inspired by Spring."
