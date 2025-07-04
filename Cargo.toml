@@ -13,5 +13,6 @@ categories = ["development-tools", "rust-patterns"]
 [dependencies]
 anyhow = "1"
 once_cell = "1"
+thiserror = "1"
 
 [lib]
