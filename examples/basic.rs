@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Saugata Kundu
 // Licensed under the Apache-2.0 License
 
-use mycelium::CONTAINER;
+use shellder::CONTAINER;
 
 #[derive(Debug)]
 struct Config {

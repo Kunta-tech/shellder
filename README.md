@@ -1,4 +1,4 @@
-# Mycelium
+# Shellder
 
 *A lightweight, Spring-inspired Dependency Injection framework for Rust.*
 
@@ -6,7 +6,7 @@
 
 ## ✨ Overview
 
-Mycelium provides a minimal, ergonomic foundation for building modular Rust applications with Dependency Injection.
+Shellder provides a minimal, ergonomic foundation for building modular Rust applications with Dependency Injection.
 
 The core design focuses on:
 
@@ -21,11 +21,11 @@ This crate is ideal for applications and services where you want to decouple com
 
 ## 🚀 Quick Start
 
-Add Mycelium to your `Cargo.toml`:
+Add Shellder to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mycelium = "0.1"
+shellder = "0.1"
 ```
 
 # 🧩 Current Features
@@ -62,14 +62,14 @@ start() and stop() methods for components to manage initialization/cleanup.
 
 - Application Runner
 
-mycelium::run() helper for simple startup and shutdown logic.
+shellder::run() helper for simple startup and shutdown logic.
 
 - Testing Utilities
 
 Helpers to swap dependencies with mocks for unit testing.
 
 # 💡 Vision
-Mycelium aims to be a batteries-included application framework inspired by Spring, but fully Rust-idiomatic:
+Shellder aims to be a batteries-included application framework inspired by Spring, but fully Rust-idiomatic:
 
 - Clear compile-time safety
 - Minimal runtime overhead
