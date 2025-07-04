@@ -38,33 +38,33 @@ mycelium = "0.1"
 # 🛣️ Roadmap / Upcoming Features
 Below are planned improvements:
 
- Named Registration & Resolution
+- Named Registration & Resolution
 
 Allow mapping components with string keys.
 
 Enable multiple instances of the same type.
 
- Configuration Management
+- Configuration Management
 
 Load .toml / .yaml configs into typed structs automatically.
 
- Container Builder
+- Container Builder
 
 Fluent API for building and wiring dependencies.
 
- Lifecycle Hooks
+- Lifecycle Hooks
 
 start() and stop() methods for components to manage initialization/cleanup.
 
- Procedural Macros
+- Procedural Macros
 
 #[component] and #[inject] derive macros to reduce boilerplate.
 
- Application Runner
+- Application Runner
 
 mycelium::run() helper for simple startup and shutdown logic.
 
- Testing Utilities
+- Testing Utilities
 
 Helpers to swap dependencies with mocks for unit testing.
 
