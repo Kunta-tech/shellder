@@ -1,7 +1,7 @@
 # Shellder
 
 *A lightweight, Spring-inspired Dependency Injection framework for Rust.*
-
+*A Crab needs its Shell*
 ---
 
 ## ✨ Overview
