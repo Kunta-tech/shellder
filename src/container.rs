@@ -1,8 +1,9 @@
+// Copyright (c) 2024 Your Name
+// Licensed under the MIT OR Apache-2.0 License
+
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
-
-use crate::resolve_error::ResolveError;
 
 enum Entry {
     Instance(Arc<dyn Any + Send + Sync>),
