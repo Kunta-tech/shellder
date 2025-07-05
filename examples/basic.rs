@@ -33,4 +33,5 @@ fn main() {
         Ok(db) => println!("Got config: {:?}", db),
         Err(e) => eprintln!("Error resolving Config: {}", e),
     }
+
 }

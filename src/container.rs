@@ -12,31 +12,36 @@ enum Entry {
 
 pub struct Container {
     instances: RwLock<HashMap<TypeId, Entry>>,
+    // container_name: RwLock<HashMap<TypeId, &'static str>>,
 }
 
 impl Container {
     pub fn new() -> Self {
         Self {
             instances: RwLock::new(HashMap::new()),
+            // container_name: RwLock::new(HashMap::new()),
         }
     }
-
+// , name: &'static str
     pub fn register<T: Any + Send + Sync>(&self, instance: T) -> Result<(), String> {
         let mut instances = self.instances.write().unwrap();
+        // let mut cnt_names = self.container_name.write().unwrap();
         let type_id = TypeId::of::<T>();
         if instances.contains_key(&type_id) {
             return Err(format!("Type already registered: {}", std::any::type_name::<T>()));
         }
         instances.insert(type_id, Entry::Instance(Arc::new(instance)));
+        // cnt_names.insert(type_id, name);
         Ok(())
     }
-
+// , name: &'static str
     pub fn register_lazy<T, F>(&self, factory: F) -> Result<(), String>
     where
         T: Any + Send + Sync,
         F: Fn() -> T + Send + Sync + 'static,
     {
         let mut instances = self.instances.write().unwrap();
+        // let mut cnt_names = self.container_name.write().unwrap();
         let type_id = TypeId::of::<T>();
         if instances.contains_key(&type_id) {
             return Err(format!("Type already registered: {}", std::any::type_name::<T>()));
@@ -45,6 +50,7 @@ impl Container {
         // Wrap factory to return Arc<dyn Any>
         let boxed_factory = Box::new(move || Arc::new(factory()) as Arc<dyn Any + Send + Sync>);
         instances.insert(type_id, Entry::Factory(boxed_factory));
+        // cnt_names.insert(type_id, name);
         Ok(())
     }
 
@@ -76,4 +82,13 @@ impl Container {
             }
         }
     }
+
+    // pub fn list(&self) {
+    //     let map = self.instances.read().unwrap();
+    //     let names = self.container_name.read().unwrap();
+    //     println!("--- Registered Components ---");
+    //     for entry in map.keys() {
+    //         println!("{}", names[entry]);
+    //     }
+    // }
 }
