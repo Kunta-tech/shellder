@@ -45,6 +45,8 @@ dependencies = [
 [[package]]
 name = "shellder-macros"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0f4759b6ed142e1998c52d264983a1ac5ca57c6ac5d99112c082777f1fffd57"
 dependencies = [
  "proc-macro2",
  "quote",
