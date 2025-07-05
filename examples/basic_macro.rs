@@ -1,4 +1,4 @@
-use shellder::{component, Container, Hooks, Registerable};
+use shellder::{component, Container, Hooks};
 use shellder_macros::Hooks;
 
 #[derive(Debug)]
