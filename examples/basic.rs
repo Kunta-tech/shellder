@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Saugata Kundu
 // Licensed under the Apache-2.0 License
 
-use shellder::CONTAINER;
+use shellder::DEFAULT_CONTAINER;
 
 #[derive(Debug)]
 struct Config {
@@ -13,23 +13,23 @@ struct DataBase {
 }
 
 fn main() {
-    CONTAINER.register(Config {
+    DEFAULT_CONTAINER.register(Config {
         db_url: "postgres://localhost".into(),
     }).expect("Failed to register Config");
 
-    match CONTAINER.resolve::<Config>() {
+    match DEFAULT_CONTAINER.resolve::<Config>() {
         Ok(cfg) => println!("Got config: {:?}", cfg),
         Err(e) => eprintln!("Error resolving Config: {}", e),
     }
 
-    CONTAINER.register_lazy(|| {
+    DEFAULT_CONTAINER.register_lazy(|| {
         println!("Lazy Init...");
         DataBase {
             name: "pokemon".into(),
         }
     }).expect("Failed to register Config");
 
-    match CONTAINER.resolve::<DataBase>() {
+    match DEFAULT_CONTAINER.resolve::<DataBase>() {
         Ok(db) => println!("Got config: {:?}", db),
         Err(e) => eprintln!("Error resolving Config: {}", e),
     }

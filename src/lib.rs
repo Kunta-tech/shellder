@@ -2,17 +2,14 @@
 // Licensed under the Apache-2.0 License
 
 mod container;
-mod resolve_error;
+mod errors;
 pub use container::Container;
 
-pub use shellder_macros::component;
+pub use errors::*;
+pub use shellder_macros::{component, Hooks};
 use once_cell::sync::Lazy;
 
-pub static CONTAINER: Lazy<Container> = Lazy::new(Container::new);
-
-pub trait Registerable {
-    fn register(container: &Container);
-}
+pub static DEFAULT_CONTAINER: Lazy<Container> = Lazy::new(Container::new);
 
 pub trait Hooks {
     fn startup(&self);

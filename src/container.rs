@@ -5,6 +5,9 @@ use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
+use crate::{RegistrationError, ResolveError};
+
+
 enum Entry {
     Instance(Arc<dyn Any + Send + Sync>),
     Factory(Box<dyn Fn() -> Arc<dyn Any + Send + Sync> + Send + Sync>),
@@ -12,53 +15,53 @@ enum Entry {
 
 pub struct Container {
     instances: RwLock<HashMap<TypeId, Entry>>,
-    // container_name: RwLock<HashMap<TypeId, &'static str>>,
+    instance_names: RwLock<HashMap<TypeId, &'static str>>,
 }
 
 impl Container {
     pub fn new() -> Self {
         Self {
             instances: RwLock::new(HashMap::new()),
-            // container_name: RwLock::new(HashMap::new()),
+            instance_names: RwLock::new(HashMap::new()),
         }
     }
-// , name: &'static str
-    pub fn register<T: Any + Send + Sync>(&self, instance: T) -> Result<(), String> {
+    pub fn register<T: Any + Send + Sync>(&self, instance: T) -> Result<(), RegistrationError> {
         let mut instances = self.instances.write().unwrap();
-        // let mut cnt_names = self.container_name.write().unwrap();
+        let mut inst_names = self.instance_names.write().unwrap();
         let type_id = TypeId::of::<T>();
+        let type_name = std::any::type_name::<T>();
         if instances.contains_key(&type_id) {
-            return Err(format!("Type already registered: {}", std::any::type_name::<T>()));
+            return Err(RegistrationError::AlreadyRegistered(std::any::type_name::<T>()));
         }
         instances.insert(type_id, Entry::Instance(Arc::new(instance)));
-        // cnt_names.insert(type_id, name);
+        inst_names.insert(type_id, type_name);
         Ok(())
     }
-// , name: &'static str
-    pub fn register_lazy<T, F>(&self, factory: F) -> Result<(), String>
+    pub fn register_lazy<T, F>(&self, factory: F) -> Result<(), RegistrationError>
     where
         T: Any + Send + Sync,
         F: Fn() -> T + Send + Sync + 'static,
     {
         let mut instances = self.instances.write().unwrap();
-        // let mut cnt_names = self.container_name.write().unwrap();
+        let mut inst_names = self.instance_names.write().unwrap();
         let type_id = TypeId::of::<T>();
+        let type_name = std::any::type_name::<T>();
         if instances.contains_key(&type_id) {
-            return Err(format!("Type already registered: {}", std::any::type_name::<T>()));
+            return Err(RegistrationError::AlreadyRegistered(std::any::type_name::<T>()));
         }
 
         // Wrap factory to return Arc<dyn Any>
         let boxed_factory = Box::new(move || Arc::new(factory()) as Arc<dyn Any + Send + Sync>);
         instances.insert(type_id, Entry::Factory(boxed_factory));
-        // cnt_names.insert(type_id, name);
+        inst_names.insert(type_id, type_name);
         Ok(())
     }
 
-    pub fn resolve<T: Any + Send + Sync>(&self) -> Result<Arc<T>, String> {
+    pub fn resolve<T: Any + Send + Sync>(&self) -> Result<Arc<T>, ResolveError> {
         let mut instances = self.instances.write().unwrap();
         let type_id = TypeId::of::<T>();
         let entry = instances.get_mut(&type_id).ok_or_else(|| {
-            format!("Type not found: {}", std::any::type_name::<T>())
+            ResolveError::NotFound(std::any::type_name::<T>())
         })?;
 
         match entry {
@@ -66,7 +69,7 @@ impl Container {
                 // Downcast
                 arc_any.clone()
                     .downcast::<T>()
-                    .map_err(|_| format!("Failed to downcast: {}", std::any::type_name::<T>()))
+                    .map_err(|_| ResolveError::DowncastFailed(std::any::type_name::<T>()))
             }
             Entry::Factory(factory) => {
                 // Call factory
@@ -78,17 +81,28 @@ impl Container {
                 // Downcast
                 new_instance
                     .downcast::<T>()
-                    .map_err(|_| format!("Failed to downcast after factory: {}", std::any::type_name::<T>()))
+                    .map_err(|_| ResolveError::DowncastFailed(std::any::type_name::<T>()))
             }
         }
     }
 
-    // pub fn list(&self) {
-    //     let map = self.instances.read().unwrap();
-    //     let names = self.container_name.read().unwrap();
-    //     println!("--- Registered Components ---");
-    //     for entry in map.keys() {
-    //         println!("{}", names[entry]);
-    //     }
-    // }
 }
+impl std::fmt::Debug for Container {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let entries = self.instances.read().unwrap();
+        let names = self.instance_names.read().unwrap();
+        writeln!(f, "Container contents:")?;
+        for (type_id, entry) in entries.iter() {
+            println!(
+                "- {:?}: {}",
+                names[type_id],
+                match entry {
+                    Entry::Instance { .. } => "Instance",
+                    Entry::Factory { .. } => "Factory",
+                }
+            );
+        }
+        Ok(())
+    }
+}
+
