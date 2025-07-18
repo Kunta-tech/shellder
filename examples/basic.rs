@@ -1,6 +1,8 @@
 // Copyright (c) 2025 Saugata Kundu
 // Licensed under the Apache-2.0 License
 
+use std::sync::Arc;
+
 use shellder::DEFAULT_CONTAINER;
 
 #[derive(Debug)]
@@ -30,7 +32,7 @@ fn main() {
     }).expect("Failed to register Config");
 
     match DEFAULT_CONTAINER.resolve::<DataBase>() {
-        Ok(db) => println!("Got config: {:?}", db),
+        Ok(db) => println!("Got config: {:?}",  db),
         Err(e) => eprintln!("Error resolving Config: {}", e),
     }
 

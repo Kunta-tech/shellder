@@ -85,6 +85,24 @@ impl Container {
             }
         }
     }
+    pub fn remove<T: Any + Send + Sync>(&self) -> Result<(), ResolveError> {
+        let mut instances = self.instances.write().unwrap();
+        let type_id = TypeId::of::<T>();
+        match instances.remove(&type_id) {
+            Some(_) => {
+                let mut names = self.instance_names.write().unwrap();
+                names.remove(&type_id);
+                return Ok(())
+            },
+            None => return Err(ResolveError::NotFound(std::any::type_name::<T>())),
+        }
+    }
+    pub fn clear(&self){
+        let mut instances = self.instances.write().unwrap();
+        let mut names = self.instance_names.write().unwrap();
+        instances.clear();
+        names.clear();
+    }
 
 }
 impl std::fmt::Debug for Container {

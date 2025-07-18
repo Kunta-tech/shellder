@@ -1,4 +1,4 @@
-use shellder::{Container, Hooks};
+use shellder::{Container, Hooks, Hookable};
 
 #[derive(Debug)]
 #[derive(Hooks)]

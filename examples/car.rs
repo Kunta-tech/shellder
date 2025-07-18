@@ -1,39 +1,32 @@
 // use shellder::Container;
 
-use shellder::{component, Container};
+use std::sync::Arc;
+
+use shellder::{inject, Injection, Container};
 
 #[derive(Debug)]
-#[component(Car)]
-struct SUV {
+struct Engine {
     name: &'static str,
 }
+
+#[inject]
 #[derive(Debug)]
-#[component(Car)]
-struct Sudan {
-    name: &'static str,
-}
-trait Car {
-    fn horn(&self);
-}
-impl Car for SUV {
-    fn horn(&self) {
-        println!("horning by {:?}-{}", self, self.name);
-    }
-}
-impl Car for Sudan {
-    fn horn(&self) {
-        println!("horning by {:?}-{}", self, self.name);
-    }
+struct SUV {
+    engine: Arc<Engine>,
 }
 
 fn main(){
     let container_ref = Container::new();
 
-    container_ref.register_lazy(|| SUV{name:"Maruti"}).expect("SUV not init");
-    container_ref.register(Sudan {name: "Honda"}).expect("Sudan not init");
+    container_ref.register_lazy(|| Engine { name: "V16"}).expect("Error V16:");
+    // let _ = container_ref.register(SUV { engine: container_ref.resolve::<Engine>().expect("Error") });
+    container_ref.register(SUV::inject(&container_ref)).expect("Error SUV:");
 
     match container_ref.resolve::<SUV>() {
-        Ok(ob) => ob.horn(),
-        Err(e) => println!("{}", e),
+        Ok(ob) => println!("{:?}", ob),
+        Err(e) => eprintln!("Error: {}", e),
     }
+    println!("{:#?}", container_ref);
+
+    
 }
