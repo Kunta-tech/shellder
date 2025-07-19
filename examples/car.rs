@@ -2,16 +2,18 @@
 
 use std::sync::Arc;
 
-use shellder::{inject, Injection, Container};
+use shellder::{Inject, Model, Container};
 
 #[derive(Debug)]
 struct Engine {
     name: &'static str,
 }
 
-#[inject]
+#[derive(Inject)]
 #[derive(Debug)]
 struct SUV {
+    name: String,
+    #[component]
     engine: Arc<Engine>,
 }
 
@@ -20,7 +22,7 @@ fn main(){
 
     container_ref.register_lazy(|| Engine { name: "V16"}).expect("Error V16:");
     // let _ = container_ref.register(SUV { engine: container_ref.resolve::<Engine>().expect("Error") });
-    container_ref.register(SUV::inject(&container_ref)).expect("Error SUV:");
+    container_ref.register(SUV::inject(&container_ref, "Tayota Corola".into())).expect("Error SUV:");
 
     match container_ref.resolve::<SUV>() {
         Ok(ob) => println!("{:?}", ob),

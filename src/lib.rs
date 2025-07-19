@@ -7,7 +7,7 @@ mod errors;
 pub use container::Container;
 
 pub use errors::*;
-pub use shellder_macros::{Hooks, inject};
+pub use shellder_macros::{Hooks, Inject};
 use once_cell::sync::Lazy;
 
 pub static DEFAULT_CONTAINER: Lazy<Container> = Lazy::new(Container::new);
@@ -20,8 +20,4 @@ pub trait Hooks {
 
 pub trait Hookable {
     fn run_hooks(&self);
-}
-
-pub trait Injection{
-    fn inject(container: &Container)->Self;
 }
