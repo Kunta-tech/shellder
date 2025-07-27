@@ -1,6 +1,6 @@
 [package]
 name = "shellder"
-version = "0.2.0"
+version = "0.2.5"
 edition = "2021"
 authors = ["Saugata Kundu <kundusaugata576@gmail.com>"]
 description = "A lightweight, type-safe dependency injection and application framework for Rust inspired by Spring."
@@ -13,5 +13,6 @@ categories = ["development-tools", "rust-patterns"]
 [dependencies]
 once_cell = "1"
 thiserror = "1"
+colored = "2"
 shellder-macros = { path = "../shellder-macros" }
 

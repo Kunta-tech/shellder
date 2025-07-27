@@ -1,7 +1,6 @@
 // Copyright (c) 2025 Saugata Kundu
 // Licensed under the Apache-2.0 License
 
-use std::sync::Arc;
 
 use shellder::DEFAULT_CONTAINER;
 

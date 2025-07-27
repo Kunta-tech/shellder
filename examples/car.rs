@@ -1,8 +1,6 @@
-// use shellder::Container;
-
 use std::sync::Arc;
 
-use shellder::{Inject, Model, Container};
+use shellder::{Inject, Container};
 
 #[derive(Debug)]
 struct Engine {

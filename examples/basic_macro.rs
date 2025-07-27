@@ -25,12 +25,16 @@ pub struct AnotherService;
 fn main() {
     let container_ref = Container::new();
 
-    container_ref.register_lazy(|| MyService {name:"TomCat".into()});
-    container_ref.register_lazy(|| AnotherService);
+    let _ =container_ref.register_lazy(|| MyService {name:"TomCat".into()});
+    let _ =container_ref.register_lazy(|| AnotherService);
     
     match container_ref.resolve::<MyService>() {
         Ok(service) => service.run_hooks(),
-        Err(_) => println!("Service Error"),
+        Err(err) => println!("Service Error: {}", err),
     }
     println!("{:#?}", container_ref);
+    match container_ref.resolve::<String>() {
+        Ok(obj) => println!("{}", obj),
+        Err(err) => println!("Error: {}", err),
+    }
 }

@@ -1,11 +1,11 @@
-// Copyright (c) 2024 Your Name
-// Licensed under the MIT OR Apache-2.0 License
+// Copyright (c) 2025 Saugata Kundu - kundusaugata576@gmail.com
+// Licensed under the Apache-2.0 License
 
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
-use crate::{RegistrationError, ResolveError};
+use crate::{CliLogger, Logger, RegistrationError, ResolveError};
 
 
 enum Entry {
@@ -31,6 +31,7 @@ impl Container {
         let type_id = TypeId::of::<T>();
         let type_name = std::any::type_name::<T>();
         if instances.contains_key(&type_id) {
+            CliLogger::warn(&format!("({}) is already registered", type_name));
             return Err(RegistrationError::AlreadyRegistered(std::any::type_name::<T>()));
         }
         instances.insert(type_id, Entry::Instance(Arc::new(instance)));
@@ -47,6 +48,7 @@ impl Container {
         let type_id = TypeId::of::<T>();
         let type_name = std::any::type_name::<T>();
         if instances.contains_key(&type_id) {
+            CliLogger::warn(&format!("({}) is already registered", type_name));
             return Err(RegistrationError::AlreadyRegistered(std::any::type_name::<T>()));
         }
 
@@ -61,6 +63,7 @@ impl Container {
         let mut instances = self.instances.write().unwrap();
         let type_id = TypeId::of::<T>();
         let entry = instances.get_mut(&type_id).ok_or_else(|| {
+            CliLogger::warn(&format!("({}) Not Found", std::any::type_name::<T>()));
             ResolveError::NotFound(std::any::type_name::<T>())
         })?;
 
