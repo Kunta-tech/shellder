@@ -19,6 +19,6 @@ pub trait Hooks {
     fn cleanup(&self);
 }
 
-pub trait Hookable {
+pub trait Lifecycle {
     fn run_hooks(&self);
 }

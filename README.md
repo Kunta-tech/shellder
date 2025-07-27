@@ -34,7 +34,7 @@ shellder = "0.2.5"
 
 ```rust
 use std::sync::Arc;
-use shellder::{App, Container, Hooks, Hookable};
+use shellder::{App, Container, Hooks, Lifecycle};
 
 pub struct Logger;
 impl Logger {

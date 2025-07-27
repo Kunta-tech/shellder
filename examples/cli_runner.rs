@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
-use shellder::{App, CliLogger, Container, Hookable, Hooks, Logger};
+use shellder::{App, CliLogger, Container, Lifecycle, Hooks, Logger};
 
 pub struct TaskQueue {
     queue: Arc<Mutex<Vec<String>>>,
